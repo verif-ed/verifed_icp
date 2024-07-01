@@ -1,7 +1,3 @@
-// import { ConnectButton, useWallet } from "@suiet/wallet-kit";
-import { ConnectButton, useCurrentWallet } from "@mysten/dapp-kit";
-// 'use client' // for Next.js app router
-// import PlugConnect from '@psychedelic/plug-connect';
 import {
   IDKitWidget,
   VerificationLevel,
@@ -11,25 +7,26 @@ import "@suiet/wallet-kit/style.css";
 import ThemeController from "./ThemeController";
 import usewalletStore from "../store/walletStore";
 import { Link } from "react-router-dom";
+import PlugConnect from "@psychedelic/plug-connect";
 import { useEffect } from "react";
 const Navbar = () => {
   const { setWalletConnected } = usewalletStore();
-  const { connectionStatus } = useCurrentWallet();
+
   // console.log(wallet, "this is wallet");
   // const { data } = useSuiClientQuery("getOwnedObjects", {
   //   owner: wallet?.address,
   // });
 
-  useEffect(() => {
-    if (connectionStatus === "connected") {
-      //  isWalletConnected= true;
-      setWalletConnected(true);
-      console.log("connected");
-    } else {
-      setWalletConnected(false);
-      console.log("disconnected");
-    }
-  }, [connectionStatus]);
+  // useEffect(() => {
+  //   if (connectionStatus === "connected") {
+  //     //  isWalletConnected= true;
+  //     setWalletConnected(true);
+  //     console.log("connected");
+  //   } else {
+  //     setWalletConnected(false);
+  //     console.log("disconnected");
+  //   }
+  // }, [connectionStatus]);
   const handleVerify = async (proof: ISuccessResult) => {
     console.log("handling proof", proof);
 
@@ -134,18 +131,12 @@ const Navbar = () => {
                 </button>
               )}
             </IDKitWidget>
-            {/* <PlugConnect
-  // whitelist={['canister-id']}
-  onConnectCallback={() => console.log("Some callback")}
-/> */}
+            <PlugConnect
+              whitelist={["canister-id"]}
+              onConnectCallback={() => console.log("Some callback")}
+            />
 
-            <div className="">
-              <ConnectButton
-                // className="text-white"
-                connectText={"Connect Wallet"}
-                style={{ backgroundColor: "" }}
-              />
-            </div>
+            <div className=""></div>
           </div>
         </div>
       </div>

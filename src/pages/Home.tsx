@@ -1,18 +1,11 @@
-import { ConnectModal, useCurrentWallet } from "@mysten/dapp-kit";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import SendSuiTx from "../components/SendSuiTx";
-// import VideoCapture from "../components/Proctoring/VideoCapture";
+
 const Home = () => {
   const [open, setOpen] = useState(false);
-  const { connectionStatus } = useCurrentWallet();
+
   return (
     <div>
-      <ConnectModal
-        trigger={""}
-        open={open}
-        onOpenChange={(isOpen) => setOpen(isOpen)}
-      />
       <div className="hero min-h-screen">
         <div className=" "></div>
         <div className="hero-content text-center text-neutral-content ">
@@ -27,7 +20,7 @@ const Home = () => {
               et a id nisi.
             </p>
 
-            {connectionStatus === "connected" ? (
+            {"connected" === "connected" ? (
               <div>
                 <button className="btn btn-primary">
                   <Link to={"/dashboard"}>Explore</Link>
@@ -46,7 +39,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <SendSuiTx />
+      {/* <SendSuiTx /> */}
 
       {/* <VideoCapture /> */}
     </div>
