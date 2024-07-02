@@ -21,7 +21,7 @@ const Home = () => {
               <span className="text-gray-700">Verif</span>
               <span className="text-accent">Ed</span>
             </h1>
-            <p className="mb-5 text-pink-700 text-xl">
+            <p className="mb-5 text-2xl feature-block font-semibold text-gray-700 ">
               Powered by Internet Computer Protocol (ICP).
             </p>
             <button

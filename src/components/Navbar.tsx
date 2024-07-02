@@ -8,6 +8,7 @@ import ThemeController from "./ThemeController";
 import usewalletStore from "../store/walletStore";
 import { Link } from "react-router-dom";
 import PlugConnect from "@psychedelic/plug-connect";
+import worldid from "../assets/worldId-removebg-preview.png";
 import { useEffect } from "react";
 const Navbar = () => {
   const { setWalletConnected } = usewalletStore();
@@ -125,15 +126,23 @@ const Navbar = () => {
                 // This is the button that will open the IDKit modal
                 <button
                   onClick={open}
-                  className="w-[35%] bg-primary rounded-xl btn"
+                  className="w-max mr-3 bg-white border-[3px] border-black rounded-xl flex justify-between items-center gap-4 px-1"
                 >
-                  Verify with World ID
+                  <img
+                    src={worldid}
+                    alt=""
+                    className=""
+                    height={35}
+                    width={35}
+                  />{" "}
+                  <p className="text font-semibold text-black">World ID</p>
                 </button>
               )}
             </IDKitWidget>
             <PlugConnect
               whitelist={["canister-id"]}
               onConnectCallback={() => console.log("Some callback")}
+              title="Connect"
             />
 
             <div className=""></div>
