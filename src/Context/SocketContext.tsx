@@ -1,30 +1,31 @@
-import { useState, createContext, useEffect } from "react";
-import { Socket, io } from "socket.io-client";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client";
 
-const SocketContext = createContext<any>(undefined);
+interface SocketContextType {
+  socket: Socket | null;
+}
 
-export const SocketProvider = ({ children }: { children: any }) => {
-  const [socket, setSocket] = useState<Socket>();
+const SocketContext = createContext<SocketContextType>({ socket: null });
+
+export const useSocket = () => useContext(SocketContext);
+
+export const SocketProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    if (socket == null) {
-      const socket = io("http://localhost:3000", {});
-      setSocket(socket);
-    }
-    // console.log("socet connected");
+    const newSocket = io("https://ai-proctor.onrender.com/"); // Replace with your server URL
+    setSocket(newSocket);
 
-    if (socket) {
-    }
-    // console.log(usertrips.trips);
+    return () => {
+      newSocket.close();
+    };
   }, []);
 
   return (
-    <>
-      <SocketContext.Provider value={{ socket }}>
-        {children}
-      </SocketContext.Provider>
-    </>
+    <SocketContext.Provider value={{ socket }}>
+      {children}
+    </SocketContext.Provider>
   );
 };
-
-export default SocketContext;

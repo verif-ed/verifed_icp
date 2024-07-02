@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 // import io from "socket.io-client";
 import * as faceMesh from "@mediapipe/face_mesh";
 import * as cam from "@mediapipe/camera_utils";
@@ -9,10 +9,10 @@ import {
   detectDepthVariation,
   detectHeadMovement,
 } from "../../utils/livenessDetector";
-import SocketContext from "../../Context/SocketContext";
+import { useSocket } from "../../Context/SocketContext";
 
 const VideoCapture: React.FC = () => {
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSocket();
   console.log(socket, "this is socket");
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -96,7 +96,7 @@ const VideoCapture: React.FC = () => {
   };
 
   const analyzeResults = () => {
-    if (resultsRef.current && resultsRef.current.multiFaceLandmarks) {
+    if (resultsRef.current && resultsRef.current.multiFaceLandmarks && socket) {
       const landmarks = resultsRef.current.multiFaceLandmarks[0];
       if (landmarks) {
         const blinked = detectBlink(landmarks);
@@ -120,7 +120,8 @@ const VideoCapture: React.FC = () => {
             // console.log("Likely a real person");
           } else {
             console.log("Possible photo detected");
-            socket.emit("proctoring_alert", { type: "possible_photo" });
+            socket &&
+              socket.emit("proctoring_alert", { type: "possible_photo" });
           }
         }
 
@@ -159,10 +160,15 @@ const VideoCapture: React.FC = () => {
   };
 
   const promptUserAction = () => {
-    const randomAction = Math.random() < 0.5 ? "blink" : "head_move";
-    // alert(`Please : ${randomAction}`);
-    socket.emit("proctoring_challenge", { action: randomAction });
-    console.log(`Prompt user to: ${randomAction}`);
+    if (socket && socket.emit) {
+      try {
+        socket.emit("proctoring_alert", { type: "looking_away" });
+      } catch (error) {
+        console.error("Error emitting socket event:", error);
+      }
+    } else {
+      console.error("Socket or emit function is not available");
+    }
   };
 
   return (
